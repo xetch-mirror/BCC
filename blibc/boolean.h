@@ -1,7 +1,7 @@
 // bool.h
 
-#ifndef BOOL.H
-#define BOOL.H
+#ifndef BOOL_H
+#define BOOL_H
 
 // bool is int?
 #define bool int
