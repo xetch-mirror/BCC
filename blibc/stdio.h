@@ -4,16 +4,13 @@
 
 #include "stddef.h"
 
-// standard
 #define stdin 0
 #define stdout 1
 #define stderr 2
-
 #define EOF -1
 
-// declaration 
 int putchar(int ch);
-int puts(char *str);
-int printf(char *fmt, ...);
+int puts(int *str);
+int printf(int *fmt);
 
 #endif
