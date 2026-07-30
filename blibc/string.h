@@ -4,9 +4,24 @@
 
 #include "stddef.h"
 
-size_t strlen(char *str);
-int strcmp(char *s1, char *s2);
-char *strcpy(char *dest, char *src);
-void *memset(void *ptr, int val, size_t num);
+// implementing 
+char *strcpy(char *dest, char *src) {
+    char *saved = dest;
+    while (*src != 0) {
+        *dest = *src;
+        dest = dest + 1;
+        src = src + 1;
+    }
+    *dest = 0; // term 
+    return saved;
+}
+
+size_t strlen(char *str) {
+    char *p = str;
+    while (*p != 0) {
+        p = p + 1;
+    }
+    return p - str;
+}
 
 #endif
