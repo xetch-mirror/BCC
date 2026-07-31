@@ -13,7 +13,10 @@ $(TARGET): $(OBJS)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+run: $(TARGET)
+	./$(TARGET)
+
 clean:
 	rm -rf $(OBJS) $(TARGET)
 
-.PHONY: all clean
+.PHONY: all clean run
