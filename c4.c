@@ -523,6 +523,6 @@ int main(int argc, char **argv)
     else if (i == MSET) a = (int)memset((char *)sp[2], sp[1], *sp);
     else if (i == MCMP) a = memcmp((char *)sp[2], (char *)sp[1], *sp);
     else if (i == EXIT) { printf("exit(%d) cycle = %d\n", *sp, cycle); return *sp; }
-    else { printf("unknown instruction = %d! cycle = %d\n", i, cycle); return -1; }
+    else { printf("STOP! unknown function = %d! cycle = %d\n", i, cycle); return -1; }
   }
 }
