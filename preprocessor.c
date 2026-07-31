@@ -73,7 +73,7 @@ void preprocess(const char* source_code, char* output_buffer) {
                     // Check word boundaries
                     char prev = (match == p) ? ' ' : *(match - 1);
                     char next = *(match + mlen);
-                    
+
                     if (!isalnum(prev) && prev != '_' && !isalnum(next) && next != '_') {
                         // Copy up to match
                         strncpy(out, curr, match - curr);
