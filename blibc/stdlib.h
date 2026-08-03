@@ -7,9 +7,9 @@
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 
-int *malloc(void size_t);
+int *malloc(int size);
 void free(void *ptr);
 void exit(int code);
-int atoi(const char *str);
+int atoi(int *str);
 
 #endif
