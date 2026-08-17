@@ -15,7 +15,7 @@ char *load_source(const char *filename) {
     char *buf = malloc(size + 1);
     if (!buf) {
         fclose(f);
-        printf("BBC:can't allocate memory to file, terminated interpret\n");
+        printf("BCC:can't allocate memory to file, terminated interpret\n");
         return NULL;
     }
 
