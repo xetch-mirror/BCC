@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "loader.h"
 
 char *load_source(const char *filename) {
     FILE *f = fopen(filename, "rb");
@@ -20,7 +21,7 @@ char *load_source(const char *filename) {
     }
 
     fread(buf, 1, size, f);
-    buf[size] = 0; // erminate if null
+    buf[size] = 0;
 
     fclose(f);
     return buf;
