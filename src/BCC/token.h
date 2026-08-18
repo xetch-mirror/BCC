@@ -40,9 +40,9 @@ extern int  *id, *sym;         // current identifier, symbol table base
 extern int  tk, ival, ty, loc, line; // current token, its value, expr type, local offset, source line
 extern int  src, debug;        // flags: print source+asm, print VM trace
 
-// stable base pointers, set once by lex_init(), untouched afterward --
-// `le` moves as -s tracing prints, so emit_write_object() needs these
-// instead to compute code/data lengths.
+// stable base pointers, set once by lex_init()/lex_init_from_buffer(),
+// untouched afterward -- `le` moves as -s tracing prints, so
+// emit_write_object() needs these instead to compute code/data lengths.
 extern int  *code_base;
 extern char *data_base;
 
@@ -53,7 +53,7 @@ void fatal(const char *fmt, ...);                  // reports + exits, for pre-l
 // ---- emitter (defined in emit.c) ----
 // parse.c never touches the `e` array directly -- it goes through these,
 // so emit.c is the only place that knows how instructions get laid out
-// and (eventually) how they get written to an .o file on disk.
+// and how they get written to an .o file on disk.
 void  emit(int word);              // append one word (opcode or operand) to the code array
 int  *emit_here(void);             // current position in the code array (== c4's `e`)
 int  *emit_slot(void);             // reserve+return a patchable operand slot (== c4's `d = ++e`)
@@ -61,11 +61,11 @@ void  emit_patch(int *slot, int *target); // backpatch a jump target, cast to in
 int   emit_last_is(int opcode);    // true if the last emitted word equals opcode (== c4's `*e == X`)
 void  emit_undo(void);             // drop the last emitted word (== c4's `--e`)
 void  emit_replace_last(int opcode); // overwrite last emitted word in place (== c4's `*e = X`)
-int   emit_strcmp_main(char *name); // 0 if name == "main", nonzero otherwise (no libc string.h needed by parse.c)
+int   emit_strcmp_main(char *name); // 0 if name == "main", nonzero otherwise
 
 // Flushes the code/data/symbol pools built by parse_program() to a real
 // file on disk in bcc's object format, so it can be handed back into
-// bcc's existing .o-reading linker path. Returns 0 on success.
+// bl's .o-reading linker path. Returns 0 on success.
 int emit_write_object(const char *out_path, int *idmain);
 
 #endif
