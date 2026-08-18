@@ -16,14 +16,11 @@ int  src, debug;
 int  *code_base;
 char *data_base;
 
-int lex_init(const char *path, int poolsz)
+// shared setup: allocate sym/code/data pools, seed keywords+syscalls.
+// Does NOT touch `p`/`lp` (the source cursor) -- callers set those.
+static int lex_init_pools(int poolsz)
 {
-  int fd, i;
-
-  if ((fd = open(path, 0)) < 0) {
-    fatal("could not open source file %s", path);
-    return -1;
-  }
+  int i;
 
   if (!(sym = malloc(poolsz)))       { fatal("could not malloc symbol area"); return -1; }
   if (!(le = e = malloc(poolsz)))    { fatal("could not malloc code area");   return -1; }
@@ -35,8 +32,10 @@ int lex_init(const char *path, int poolsz)
   memset(e,    0, poolsz);
   memset(data, 0, poolsz);
 
-  // seed keywords + builtin syscalls into the symbol table, same order
-  // c4's main() did it in -- next() needs these before real lexing starts.
+  // seed keywords + builtin syscalls into the symbol table -- next()
+  // needs these interned before real lexing starts. Uses a throwaway
+  // local string as source; doesn't touch the real `p`/`lp` the caller
+  // is about to set up.
   p = "char else enum if int return sizeof while "
       "open read close printf malloc free memset memcmp exit void main";
   i = Char; while (i <= While) { next(); id[Tk] = i++; }
@@ -44,11 +43,35 @@ int lex_init(const char *path, int poolsz)
   next(); id[Tk] = Char; // reuse Char slot to represent `void`
   next();                // leaves `id` pointed at "main"'s symbol row
 
+  return 0;
+}
+
+int lex_init(const char *path, int poolsz)
+{
+  int fd, i;
+
+  if ((fd = open(path, 0)) < 0) {
+    fatal("could not open source file %s", path);
+    return -1;
+  }
+
+  if (lex_init_pools(poolsz) < 0) return -1;
+
   if (!(lp = p = malloc(poolsz))) { fatal("could not malloc source area"); return -1; }
   if ((i = read(fd, p, poolsz - 1)) <= 0) { fatal("read() of %s returned %lld", path, i); return -1; }
   p[i] = 0;
   close(fd);
 
+  line = 1;
+  next(); // prime the first real token
+  return 0;
+}
+
+int lex_init_from_buffer(char *source_buf, int poolsz)
+{
+  if (lex_init_pools(poolsz) < 0) return -1;
+
+  lp = p = source_buf; // caller owns/frees this buffer
   line = 1;
   next(); // prime the first real token
   return 0;
