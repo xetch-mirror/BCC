@@ -58,4 +58,17 @@ OpCode codegen_op_at(int index) {
 
 int codegen_operand_at(int index) {
     return g_operands[index];
+
+int codegen_last_is(OpCode op) {
+    if (g_count == 0) return 0;
+    return g_ops[g_count - 1] == op;
+}
+
+void codegen_replace_last(OpCode op) {
+    if (g_count > 0) g_ops[g_count - 1] = op;
+}
+
+void codegen_undo(void) {
+    if (g_count > 0) g_count--;
+}
 }
