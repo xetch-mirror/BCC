@@ -65,6 +65,17 @@ static const OpEntry BCONV_OPTABLE[] = {
     { "N9", OP_HLT,  0 },
 };
 
+void codegen_init(void);
+int  codegen_emit(OpCode op, int operand);
+int  codegen_here(void);
+void codegen_patch(int index, int new_operand);
+int  codegen_count(void);
+OpCode codegen_op_at(int index);
+int  codegen_operand_at(int index);
+int  codegen_last_is(OpCode op);
+void codegen_replace_last(OpCode op);
+void codegen_undo(void);
+
 #define BCONV_OPTABLE_LEN (sizeof(BCONV_OPTABLE) / sizeof(OpEntry))
 
 #endif
